@@ -33,12 +33,12 @@ P = -(s + 5) / (s * (s^2 + 4*s + 2));
 % tipo 1, per un riferimento a rampa, otteniamo e_ss = R / K, quindi
 % aggiungo un polo nell'origine in modo tale che il sistema diventi di tipo
 % 2, che per un riferimento a rampa ci permette di ottenere e_ss = 0.
-% Inoltre inserisco un guadagno Kc1 = -1 per cambiare il segno al luogo
+% Inoltre inserisco un guadagno K = -1 per cambiare il segno al luogo
 % delle radici poichè abbiamo sempre studiato per semplicità il caso K > 0.
 % Pertanto la prima azione di controllo è un'azione di tipo PI.
 
-Kc1 = -1;
-C1 = Kc1 / s;
+K = -1;
+C1 = K / s;
 
 % A questo punto osserviamo che il luogo delle radici, del controllore che
 % stiamo realizzando, presenta un polo all'infinito, pertanto conviene
@@ -47,13 +47,13 @@ C1 = Kc1 / s;
 % funzione propria (n = m), pertanto possiamo aggiungere anche un polo per
 % rendere il controllore strettamente proprio (n > m).
 
-tau_z1 = 1 / 0.5;
-tau_p1 = 1 / 100;
-C2 = (1 + tau_z1 * s) / (1 + tau_p1 * s);
+tau_z = 1 / 0.5;
+tau_p = 1 / 100;
+C2 = (1 + tau_z * s) / (1 + tau_p * s);
 
 % C = C1 * C2;
 % figure;
-% margin(C * P);
+% nyquist(C * P);
 % pole(C * P)
 
 % Utilizzando la funzione nyquist(C * P); è facile verificare che il
@@ -94,8 +94,8 @@ Ra = (1 + tau_ra * s) / (1 + alpha * tau_ra * s);
 % specifiche di progettazione.
 
 C = C1 * C2 * Ra^2;
-L1 = C * P;
-Wyr1 = minreal(L1 / (1 + L1));
+L = C * P;
+Wyr = minreal(L / (1 + L));
 
 % Tuttavia possiamo migliorare ancora di più le specifiche inserendo un
 % filtro passa basso Fr per rendere più smooth il segnale di riferimento,
@@ -106,8 +106,8 @@ Wyr1 = minreal(L1 / (1 + L1));
 % pertanto tracciando i diagrammi di Bode si evince che in corrispondenza
 % della pulsazione di taglio w_c = 1 / tau_fr il guadagno calcolato in w_c
 % è |Fr(jw_c)| = 1 / sqrt(2), che corrisponde ad un'attenuazione del
-% segnale di -3dB. Inoltre ci costruiamo la funzione Wyrr(s) che
-% naturalmente sarà data dalla cascata tra Fr(s) e Wyr1(s).
+% segnale di -3dB. Inoltre ci costruiamo la funzione W(s) che
+% naturalmente sarà data dalla cascata tra Fr(s) e Wyr(s).
 
 tau_fr = 1;
 Fr = 1 / (1 + tau_fr * s);
@@ -116,25 +116,25 @@ Fr = 1 / (1 + tau_fr * s);
 % margin(Fr);
 % grid on;
 
-Wyrr = Fr * Wyr1;
+W = Fr * Wyr;
 
 % Utilizzo i diagrammi di Bode, il luogo delle radici e il diagramma di
 % Nyquist per avere informazioni sulla funzione del guadagno ad anello
-% L(s), sul sistema in retroazione Wyr1(s) e sul sistema filtrato Wyrr(s)
+% L(s), sul sistema in retroazione Wyr(s) e sul sistema filtrato W(s)
 % (sempre in retroazione).
 
 figure;
-margin(L1);
+margin(L);
 grid on;
 
 figure;
-rlocus(L1);
+rlocus(L);
 
 figure;
-nyquist(L1);
+nyquist(L);
 
 figure;
-step(Wyr1, Wyrr);
+step(Wyr, W);
 grid on;
 
 % Utilizzando il filtro Fr(s) ed in particolare analizzando la risposta al 
@@ -144,14 +144,14 @@ grid on;
 
 % A questo punto è il momento di analizzare se la soluzione proposta è
 % accettabile, ed in particolare confrontiamo la risposta del sistema in
-% retroazione con filtraggio a tempo continuo Wyrr(t) con l'imgresso a
+% retroazione con filtraggio a tempo continuo W(t) con l'imgresso a
 % rampa.
 
 t = 0:0.1:100;
 ramp = t;
 
 figure;
-lsim(Wyrr, ramp, t);
+lsim(W, ramp, t);
 grid on;
 
 
