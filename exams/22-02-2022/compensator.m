@@ -26,45 +26,51 @@ P = -(s + 5) / (s * (s^2 + 4*s + 2));
 % nyquist(P);
 
 % Soluzione 1: sintetizzare il controllore C partendo dal luogo delle
-% radici. In particolare sapendo che P = -(s + 5) / (s * (s^2 + 4*s + 2))
-% per ottenere un errore a regime nullo per il riferimento a rampa abbiamo
-% che e_ss = lim_{s -> 0} s * -(s + 5) / (s * (s + 4*s + 2)) * R/s^2 =
-% lim_{s -> 0} -(s + 5) / (s * (s^2 + 4*s + 2)) che essendo un sistema di
-% tipo 1, per un riferimento a rampa, otteniamo e_ss = R / K, quindi
-% aggiungo un polo nell'origine in modo tale che il sistema diventi di tipo
-% 2, che per un riferimento a rampa ci permette di ottenere e_ss = 0.
-% Inoltre inserisco un guadagno K = -1 per cambiare il segno al luogo
-% delle radici poichè abbiamo sempre studiato per semplicità il caso K > 0.
-% Pertanto la prima azione di controllo è un'azione di tipo PI.
+% radici.
+% 
+% Per soddisfare i requisiti di precisione definiamo i seguenti
+% parametri: (leggi pdf)
 
+h = 1;
 K = -1;
-C1 = K / s;
+C1 = K / s^h;
 
 % A questo punto osserviamo che il luogo delle radici, del controllore che
-% stiamo realizzando, presenta un polo all'infinito, pertanto conviene
+% stiamo realizzando, presenta un polo all'infinito. Pertanto conviene
 % aggiungere uno zero per attirare tale polo nel semipiano sinistro. 
-% Tuttavia con quest'ultima aggiunta il controllore C è descritto da una
+% Tuttavia con quest'ultima aggiunta il controllore C(s) è descritto da una
 % funzione propria (n = m), pertanto possiamo aggiungere anche un polo per
-% rendere il controllore strettamente proprio (n > m).
+% rendere il controllore strettamente proprio (n > m). (leggi pdf)
 
-tau_z = 1 / 0.5;
-tau_p = 1 / 100;
+z = -0.5;
+tau_z = 1 / abs(z);
+
+p = -100;
+tau_p = 1 / abs(p);
+
 C2 = (1 + tau_z * s) / (1 + tau_p * s);
+
+% figure;
+% rlocus(-1 * C1 * C2);
+
+% Utilizzando la funzione "nyquist(C * P);" è facile verificare che il
+% sistema retroazionato è instabile. Pertanto possiamo utilizzare una rete
+% correttrice per aumentare il margine di fase. In particolare la rete che
+% ci permette di fare ciò è una rete anticipatrice, che talvolta diminuisce
+% l'overshoot e il tempo di assestamento t_s.
+% Tuttavia bisogna ricordare che 0 < alpha < 1, tau_ra > alpha * tau_ra e
+% che w_m = 1 / (tau_ra * sqrt(alpha)).
+% In particolare dall'ultima formula è possibile ricavare il valore di
+% tau_ra e questo vuol dire che il valore di w_m risulterà arbitrario.
 
 % C = C1 * C2;
 % figure;
 % nyquist(C * P);
 % pole(C * P)
-
-% Utilizzando la funzione nyquist(C * P); è facile verificare che il
-% sistema retroazionato è instabile. Pertanto possiamo utilizzare una rete
-% correttrice per aumentare il margine di fase. In particolare la rete che
-% ci permette di fare ciò è una rete anticipatrice, che talvolta diminuisce
-% la sovraelongazione massima e il tempo di assestamento t_s.
-% Tuttavia bisogna ricordare che alpha < 1, tau_ra > alpha * tau_ra e che
-% w_m = 1 / (tau_ra * sqrt(alpha)).
-% In particolare dall'ultima formula è possibile ricavare il valore di
-% tau_ra e questo vuol dire che il valore di w_m risulterà arbitrario.
+% 
+% figure;
+% margin(C * P);
+% grid on;
 
 alpha = 0.1;
 w_m = 5;
