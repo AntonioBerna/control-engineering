@@ -122,7 +122,7 @@ w_b = 5;
 Ts = 0.1;
 
 Pz = c2d(P, Ts, "zoh");
-Pw = d2c(Pz, "Tustin");
+Pw = d2c(Pz, "Tustin")
 
 % Errore nullo per riferimenti costanti
 h = 1; % P(w) è di tipo 0
@@ -155,13 +155,13 @@ grid on;
 
 % con il ritardo il luogo delle radici non funziona
 
-% da finire!!!
 clc;
 close all;
 
 % predittore di smith!!!
 Td = 0.05;
 N = 1; % capire l'ordine
+
 Pd = C * P * exp(-Td * s);
 [num, den] = pade(Td, N);
 Pa = C * P * tf(num, den);
