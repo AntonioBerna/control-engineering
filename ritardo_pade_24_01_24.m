@@ -76,27 +76,8 @@ t = 0:Ts:100;
 ramp = t;
 
 figure;
-lsim(Wyr, ramp, t);
+lsim(WyrFr, ramp, t);
 grid on;
-
-
-
-
-
-%%
-
-
-% Pongo inizialmente il controllore
-C = 1;
-
-% controlSystemDesigner(Pr, C, H);
-
-% Simulazione ...
-L = Pr * C;
-Wyr = minreal(Pr * C / (1 + L));
-
-Ld = Pr * C * H;
-Wyd2 = minreal(-Ld / (1 + Ld));
 
 
 

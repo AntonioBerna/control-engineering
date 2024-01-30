@@ -21,7 +21,7 @@ Pw = d2c(Pz, "Tustin")
 K_Pw = dcgain(Pw) % => |K_C| >= 1 / ((e_ss%) * |K_Pw|)
 K_C = 1;
 
-C1 = K_C;
+C1 = K_C; % poichè in Pw c'è già un polo nell'origine
 % controlSystemDesigner(Pw, C1);
 
 % Design del controllore C(w) terminato
