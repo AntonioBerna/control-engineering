@@ -2,9 +2,8 @@
 
 % Specifiche del controllore C(s) in presenza di un ritardo e^(-0.05 * s)
 % nella P(s):
-% - Errore a regime < 10% per riferimento a rampa
+% - Errore a regime nullo per riferimento a rampa
 % - Overshoot < 20%
-% - Tempo di assestamento ts il più piccolo possibile
 
 clc;
 clearvars;
@@ -24,62 +23,34 @@ Pr = P * Pa; % Nuovo plant P(s) con il ritardo approssimato
 % bode(Pr, P * exp(-Tr * s));
 % grid on;
 
-% Errore a regime e_ss < 0.1 * R per riferimento a rampa.
-% Poichè la Pr(s) è tipo 0, aggiungiamo un polo nell'origine per far
-% diventare la Pr(s) di tipo 1, che per un riferimento a rampa
-% presenta un e_ss = R / K_P * K_C, valida solo se:
-% p_P + p_C - q + 1 = 0, che in questo caso è vero perchè p_P = 1 (perchè
-% la Pr(s) ha un polo nell'origine), p_C = 0 e q = 2 (per la rampa).
-K_P = dcgain(Pr); % |K_C| >= 1 / ((e_ss%) * |K_P|), |K_P| = 1.25
-K_C = 8;
-
-% Inizialmente il controllore è il seguente:
-h = 1;
-C1 = K_C / s^h;
-
+% Errore a regime nullo per riferimento a rampa.
+% Inserisco un doppio polo nell'origine nella Pr(s), in questo modo
+% otteniamo e_ss = 0
+h = 2;
+C1 = 1 / s^h;
 % controlSystemDesigner(Pr, C1);
 
 % Dopo un'analisi a tentativi il controllore che rispetta meglio
 % le specifiche richieste è il seguente:
-C = -0.3 / s^h;
-L = C * Pr;
-
-figure;
-rlocus(L);
-grid on;
-
-figure;
-nyquist(L);
-grid on;
-
-% Come si evince l'overshoot è circa 8% e il tempo
-% di assestamento ts è circa 7 secondi
+C = -2.1952 * ((s + 0.1) * (s + 1)) / ((s + 10)) * C1;
+L = Pr * C;
 Wyr = minreal(L / (1 + L));
 
-% figure;
-% step(Wyr);
-% grid on;
-
-% Aggiungiamo un filtro Fr
-ts = 7;
-tau_fr = ts / 3;
-Fr = 1 / (1 + tau_fr * s);
-WyrFr = minreal(Fr * L / (1 + L));
-
+% Overshoot 19.2%
 figure;
-step(Wyr, WyrFr);
+step(Wyr);
 grid on;
 
-% Simulazione del sistema per riferimento a rampa
 Ts = 0.1;
 t = 0:Ts:100;
 ramp = t;
 
 figure;
-lsim(WyrFr, ramp, t);
+lsim(Wyr, ramp, t);
 grid on;
 
-
+% In questo caso non possiamo usare un filtro Fr
+% perchè il segnale di riferimento è una rampa.
 
 
 

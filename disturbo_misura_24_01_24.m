@@ -1,9 +1,8 @@
 % Esercitazione Controlli Automatici 2024
 
 % Specifiche del controllore C(s):
-% - Errore a regime < 10% per riferimento a rampa
+% - Errore a regime nullo per riferimento a rampa
 % - Overshoot <= 20%
-% - Tempo di assestamento t_s il più piccolo possibile
 % - Design per controllare asitoticamente un disturbo
 %   di misura d2 = 10 * sin(2 * pi * 50)
 
@@ -28,29 +27,18 @@ H = (s^2 + 2 * zeta * Wn * s + Wn^2) / (Wn^2) * first_pole * second_pole;
 % bode(H);
 % grid on;
 
-% Errore a regime e_ss < 0.1 * R per riferimento a rampa.
-% Poichè P(s) è di tipo 0, aggiungiamo un polo nell'origine per far
-% diventare la P(s) di tipo 1, che per un riferimento a rampa
-% presenta un e_ss = R / K_H * K_P * K_C, valida solo se:
-% p_H + p_P + p_C - q + 1 = 0,  che in questo caso è vero perchè p_H = 0, 
-% p_P = 1 (perchè la P(s) ha un polo nell'origine), p_C = 0 e q = 2
-% (per la rampa).
-K_H = dcgain(H); % 1
-K_P = dcgain(P); % -1.25
-
-% |K_C| >= 1 / ((e_ss%) * |K_P| * |K_H|), |K_P| = 1.25, |K_H| = 1
-K_C = 8;
-
-% Inizialmente il controllore è il seguente:
-h = 1;
-C1 = K_C / s^h;
-
+% Errore a regime nullo per riferimento a rampa.
+% Inserisco un doppio polo nell'origine nella Pr(s), in questo modo
+% otteniamo e_ss = 0
+h = 2;
+C1 = 1 / s^h;
 % controlSystemDesigner(P, C1, H);
 
 % Dopo un'analisi a tentativi il controllore che rispetta meglio
 % le specifiche richieste è il seguente:
-C = -0.26753 / s^h;
+C = -0.2714 * (s + 0.05) * C1;
 L = C * P * H;
+Wyr = minreal(P * C / (1 + L));
 
 % figure;
 % margin(L);
@@ -64,9 +52,7 @@ L = C * P * H;
 % nyquist(L);
 % grid on;
 
-% Risposta al gradino
-Wyr = minreal(P * C / (1 + L));
-
+% Overshoot 15.2%
 figure;
 step(Wyr);
 grid on;
@@ -91,7 +77,8 @@ figure;
 lsim(Wyd2, d2, t);
 grid on;
 
-
+% In questo caso non possiamo usare un filtro Fr
+% perchè il segnale di riferimento è una rampa.
 
 
 

@@ -22,24 +22,17 @@ H = 1; % retroazione unitaria
 % bode(H);
 % grid on;
 
-% Errore a regime e_ss < 0.1 * R per riferimento a rampa.
-% Poichè P(s) è di tipo 0, aggiungiamo un polo nell'origine per far
-% diventare la P(s) di tipo 1 e anche per la reiezione del disturbo
-% sull'impianto d1, che per un riferimento a rampa
-% presenta un e_ss = R / K_P * K_C, valida solo se:
-% p_P + p_C - q + 1 = 0,  che in questo caso è vero perchè 
-% p_P = 1 (perchè la P(s) ha un polo nell'origine), p_C = 0 e q = 2
-% (per la rampa).
-K_P = dcgain(P); % -1.25
-K_C = 8; % |K_C| >= 8
-
-h = 1;
-C1 = K_C / s^h;
+% Errore a regime nullo per riferimento a rampa.
+% Inserisco un doppio polo nell'origine nella P(w), in questo modo
+% otteniamo e_ss = 0. Inoltre con questa aggiunta applichiamo anche
+% la reiezione del disturbo sull'impianto d1
+h = 2;
+C1 = 1 / s^h;
 % controlSystemDesigner(P, C1);
 
 % Dopo un'analisi a tentativi il controllore che rispetta meglio
 % le specifiche richieste è il seguente:
-C = -0.27027 / s^h;
+C = -0.012574 * (1 + 20 * s) * C1;
 L = C * P * H;
 
 % figure;
@@ -54,22 +47,11 @@ L = C * P * H;
 % nyquist(L);
 % grid on;
 
-% Risposta al gradino
+% Overshoot 14.5%
 Wyr = minreal(P * C / (1 + L));
 
-% figure;
-% step(Wyr);
-% grid on;
-
-% Overshoot circa 0.681% e tempo di assestamento
-% ts = 4.91 secondi. Aggiungiamo un filtro Fr
-ts = 4.91;
-tau_fr = ts / 3;
-Fr = 1 / (1 + tau_fr * s);
-WyrFr = minreal(Fr * P * C / (1 + L));
-
 figure;
-step(Wyr, WyrFr);
+step(Wyr);
 grid on;
 
 % Simulazione del sistema per riferimento a rampa e
