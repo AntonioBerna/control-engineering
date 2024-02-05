@@ -2,7 +2,7 @@
 
 Coming soon...
 
-> **NOTE:** [polito](https://www.ladispe.polito.it/corsi/ContrAutoInf270/)
+> **NOTE:** https://www.ladispe.polito.it/corsi/ContrAutoInf270/
 
 ## Create a Symbolic Link for Matlab
 
