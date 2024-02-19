@@ -143,18 +143,9 @@
   modo da avere <math|C<around*|(|s|)>=<frac|K|s<rsup|h>>>. Tipicamente si
   utilizza il luogo delle radici applicato alla funzione
   <math|L<around*|(|s|)>=C<around*|(|s|)>*P<around*|(|s|)>> per fare una
-  scelta ottimale del parametro <math|K> in modo da garantire la stabilità
-  del sistema retroazionato. In particolare dobbiamo applicare il Criterio di
-  Routh all'equazione caratteristica <math|1+C<around*|(|s|)>*P<around*|(|s|)>=0>
-  come segue:
-
-  <\eqnarray>
-    <tformat|<table|<row|<cell|1+<frac|-K*<around*|(|s+5|)>|s<rsup|2>*<around*|(|s<rsup|2>+4*s+2|)>>=0>|<cell|\<Longrightarrow\>>|<cell|s<rsup|4>+4*s<rsup|3>+2*s<rsup|2>-K*s-5*K=0>>>>
-  </eqnarray>
-
-  tuttavia in questo caso è immediato osservare, senza applicare il Criterio
-  di Routh, che è sufficiente una costante di guadagno <math|K=-1> per fare
-  in modo che il sistema retroazionato sia asintoticamente stabile. Pertanto:
+  scelta ottimale del parametro <math|K>. In particolare, una classica scelta
+  iniziale è quella di porre <math|K=-1> in modo da invertire il luogo delle
+  radici. Pertanto:
 
   <\eqnarray>
     <tformat|<table|<row|<cell|C<around*|(|s|)>>|<cell|=>|<cell|-<frac|1|s>>>>>
@@ -225,7 +216,8 @@
 
   otteniamo il seguente luogo delle radici:
 
-  <big-figure|<tabular|<tformat|<cwith|1|-1|1|-1|cell-halign|c>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<image|images/root-locus-c2.png|0.4par|||>>|<cell|<image|images/root-locus-c2-zoom.png|0.4par|||>>>>>>|>
+  <big-figure|<tabular|<tformat|<cwith|1|-1|1|-1|cell-halign|c>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<image|images/root-locus-c2.png|0.4par|||>>|<cell|<image|images/root-locus-c2-zoom.png|0.4par|||>>>>>>|Luogo
+  delle radici dell'azione di controllo <math|C<rsub|2><around*|(|s|)>>>
 
   e se utilizziamo la lente d'ingrandimento, direttamente da Matlab, notiamo
   anche la presenza del piccolo zero <math|z=-0.5>. Inoltre osservando la
@@ -327,19 +319,19 @@
 
 <\references>
   <\collection>
-    <associate|auto-1|<tuple|1|1|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|auto-2|<tuple|1|1|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|auto-3|<tuple|2|1|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|auto-4|<tuple|2|2|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|auto-5|<tuple|2.1|2|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|auto-6|<tuple|1|2|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|auto-7|<tuple|3|4|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|auto-8|<tuple|4|4|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|auto-9|<tuple|2.2|?|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|footnote-1|<tuple|1|?|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|footnote-2|<tuple|2|?|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|footnr-1|<tuple|1|?|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
-    <associate|footnr-2|<tuple|2|?|../../../../.TeXmacs/texts/scratch/no_name_8.tm>>
+    <associate|auto-1|<tuple|1|1>>
+    <associate|auto-2|<tuple|1|1>>
+    <associate|auto-3|<tuple|2|1>>
+    <associate|auto-4|<tuple|2|2>>
+    <associate|auto-5|<tuple|2.1|2>>
+    <associate|auto-6|<tuple|1|2>>
+    <associate|auto-7|<tuple|3|4>>
+    <associate|auto-8|<tuple|4|5>>
+    <associate|auto-9|<tuple|2.2|5>>
+    <associate|footnote-1|<tuple|1|4>>
+    <associate|footnote-2|<tuple|2|5>>
+    <associate|footnr-1|<tuple|1|4>>
+    <associate|footnr-2|<tuple|2|5>>
   </collection>
 </references>
 
@@ -353,6 +345,9 @@
       Luogo delle radici, Diagramma di Nyquist>|<pageref|auto-4>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|3>||>|<pageref|auto-7>>
+
+      <tuple|normal|<surround|<hidden-binding|<tuple>|4>||Diagramma di
+      Nyquist per un sistema di tipo <with|mode|<quote|math>|h=2>>|<pageref|auto-8>>
     </associate>
     <\associate|table>
       <tuple|normal|<surround|<hidden-binding|<tuple>|1>||Tabella riassuntiva
@@ -375,7 +370,7 @@
       <with|par-left|<quote|1tab>|2.2<space|2spc>Progettazione del
       controllore <with|mode|<quote|math>|C<around*|(|s|)>> tramite PID
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
+      <no-break><pageref|auto-9>>
     </associate>
   </collection>
 </auxiliary>

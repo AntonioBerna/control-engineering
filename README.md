@@ -1,6 +1,9 @@
 # Controls Systems Design Engineering
 
-Coming soon...
+> [!WARNING]
+> This repository is unfinished. Keep your expectations low.
+
+## Useful resources
 
 > **NOTE:** https://www.ladispe.polito.it/corsi/ContrAutoInf270/
 
